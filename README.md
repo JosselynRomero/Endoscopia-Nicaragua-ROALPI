@@ -17,21 +17,6 @@
             padding: 20px;
             text-align: center;
         }
-        nav {
-            background-color: #004466;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 10px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
         .container {
             padding: 20px;
             max-width: 1200px;
@@ -113,13 +98,6 @@
         <p>Catálogo educativo de procedimientos endoscópicos del Centro Nacional de Endoscopía Hospital Alemán Nicaragüense</p>
     </header>
 
-    <nav>
-        <a href="#">Inicio</a>
-        <a href="#">Categorías</a>
-        <a href="#">Sobre mí</a>
-        <a href="#">Contacto</a>
-    </nav>
-
     <div class="container">
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Buscar videos..." onkeyup="filterVideos()" />
@@ -142,25 +120,16 @@
         </div>
 
         <div class="video-gallery" id="videoGallery">
-            <div class="video-card" data-title="Colonoscopia diagnóstica" data-category="Colonoscopia">
-                <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" frameborder="0" allowfullscreen></iframe>
-                <p>Colonoscopia diagnóstica</p>
-                <a class="download-link" href="https://www.ssyoutube.com/watch?v=VIDEO_ID_1" target="_blank">📥 Descargar video</a>
+            <!-- Videos cargados desde YouTube -->
+            <div class="video-card" data-title="Video de ejemplo 1" data-category="Colonoscopia">
+                <iframe src="https://www.youtube.com/embed/hEHM_PFZZo0" frameborder="0" allowfullscreen></iframe>
+                <p>Video de ejemplo 1</p>
+                <a class="download-link" href="https://www.ssyoutube.com/watch?v=hEHM_PFZZo0" target="_blank">📥 Descargar video</a>
             </div>
-            <div class="video-card" data-title="Polipectomía endoscópica" data-category="Colonoscopia">
-                <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" frameborder="0" allowfullscreen></iframe>
-                <p>Polipectomía endoscópica</p>
-                <a class="download-link" href="https://www.ssyoutube.com/watch?v=VIDEO_ID_2" target="_blank">📥 Descargar video</a>
-            </div>
-            <div class="video-card" data-title="Gastroscopia con biopsia" data-category="Gastroscopia">
-                <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" frameborder="0" allowfullscreen></iframe>
-                <p>Gastroscopia con biopsia</p>
-                <a class="download-link" href="https://www.ssyoutube.com/watch?v=VIDEO_ID_3" target="_blank">📥 Descargar video</a>
-            </div>
-            <div class="video-card" data-title="Detección de varices esofágicas" data-category="Gastroscopia">
-                <iframe src="https://www.youtube.com/embed/VIDEO_ID_4" frameborder="0" allowfullscreen></iframe>
-                <p>Detección de varices esofágicas</p>
-                <a class="download-link" href="https://www.ssyoutube.com/watch?v=VIDEO_ID_4" target="_blank">📥 Descargar video</a>
+            <div class="video-card" data-title="Video de ejemplo 2" data-category="Gastroscopia">
+                <iframe src="https://www.youtube.com/embed/XEepqhqNZtQ" frameborder="0" allowfullscreen></iframe>
+                <p>Video de ejemplo 2</p>
+                <a class="download-link" href="https://www.ssyoutube.com/watch?v=XEepqhqNZtQ" target="_blank">📥 Descargar video</a>
             </div>
         </div>
     </div>
@@ -173,29 +142,21 @@
         function filterVideos() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const category = document.getElementById('categoryFilter').value;
-            const gallery = document.getElementById('videoGallery');
-            const cards = gallery.getElementsByClassName('video-card');
-            for (let i = 0; i < cards.length; i++) {
-                const title = cards[i].getAttribute('data-title').toLowerCase();
-                const cardCategory = cards[i].getAttribute('data-category');
-                const matchesSearch = title.includes(input);
-                const matchesCategory = !category || cardCategory === category;
-                cards[i].style.display = matchesSearch && matchesCategory ? '' : 'none';
-            }
+            const cards = document.getElementsByClassName('video-card');
+            Array.from(cards).forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                const cardCategory = card.getAttribute('data-category');
+                card.style.display = (title.includes(input) && (!category || cardCategory === category)) ? '' : 'none';
+            });
         }
         function addVideo() {
             const title = document.getElementById('newVideoTitle').value;
             const category = document.getElementById('newVideoCategory').value;
             const url = document.getElementById('newVideoURL').value;
             let videoId = '';
-            if (url.includes('youtube.com/watch?v=')) {
-                videoId = url.split('v=')[1].split('&')[0];
-            } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1];
-            } else {
-                alert('URL de YouTube no válida');
-                return;
-            }
+            if (url.includes('youtube.com/watch?v=')) videoId = url.split('v=')[1].split('&')[0];
+            else if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1];
+            else { alert('URL de YouTube no válida'); return; }
             if (title && category && videoId) {
                 const gallery = document.getElementById('videoGallery');
                 const newCard = document.createElement('div');
@@ -210,9 +171,7 @@
                 gallery.appendChild(newCard);
                 document.getElementById('newVideoTitle').value = '';
                 document.getElementById('newVideoURL').value = '';
-            } else {
-                alert('Por favor completa todos los campos correctamente.');
-            }
+            } else alert('Por favor completa todos los campos correctamente.');
         }
     </script>
 </body>
